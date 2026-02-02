@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Valentine?</title>
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      max-width: 700px;
+      margin-bottom: 40px;
+    }
+
+    .buttons {
+      position: relative;
+      width: 320px;
+      height: 220px;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      transition: transform 0.05s linear;
+    }
+
+    #yes {
+      background-color: #28a745;
+      color: white;
+    }
+
+    #no {
+      position: absolute;
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .message {
+      animation: pop 0.4s ease-out;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .shake {
+      animation: shake 0.4s;
+    }
+
+    @keyframes shake {
+      0% { transform: translate(0); }
+      25% { transform: translate(-5px, 5px); }
+      50% { transform: translate(5px, -5px); }
+      75% { transform: translate(-5px, -5px); }
+      100% { transform: translate(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="content">
+    <h1>
+      Udi, will you be my Valentine this year and the next and the next and every Valentine from now on?
+    </h1>
+
+    <div class="buttons">
+      <button id="yes" onclick="yesClicked()">Yes ❤️</button>
+      <button id="no" onclick="noClicked()">No 😅</button>
+    </div>
+  </div>
+
+  <script>
+    const noButton = document.getElementById("no");
+    const container = document.querySelector(".buttons");
+    const content = document.getElementById("content");
+
+    let speedMultiplier = 1;
+
+    const errorMessages = [
+      "❌ Command not accepted",
+      "🚫 Access denied",
+      "⚠️ Invalid input detected",
+      "💔 That option is unavailable",
+      "😅 Nice try, but no",
+      "🔒 Permission denied"
+    ];
+
+    // "No" runs away faster each time
+    noButton.addEventListener("mouseenter", () => {
+      const maxX = container.clientWidth - noButton.offsetWidth;
+      const maxY = container.clientHeight - noButton.offsetHeight;
+
+      noButton.style.left = Math.random() * maxX + "px";
+      noButton.style.top = Math.random() * maxY + "px";
+
+      speedMultiplier += 0.15;
+      noButton.style.transform = `scale(${1 + speedMultiplier * 0.05})`;
+    });
+
+    function yesClicked() {
+      document.body.innerHTML = `
+        <div class="message">
+          <h1>I LOVE YOU ❤️💖</h1>
+          <img 
+            src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
+            alt="Celebration"
+            style="max-width:300px; border-radius:12px; margin-top:20px;"
+          />
+          <h2>Best Valentine decision ever 🥰</h2>
+        </div>
+      `;
+    }
+
+    function noClicked() {
+      const msg = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+
+      content.innerHTML = `
+        <div class="message">
+          <h1>${msg}</h1>
+          <h2>Please try again 😌</h2>
+          <p>(Resetting in 10 seconds...)</p>
+        </div>
+      `;
+
+      document.body.classList.add("shake");
+
+      setTimeout(() => {
+        document.body.classList.remove("shake");
+        location.reload();
+      }, 10000); // ⏱️ 10 seconds
+    }
+  </script>
+
+</body>
+</html>
